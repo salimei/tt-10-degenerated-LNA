@@ -5,7 +5,7 @@ K {}
 V {}
 S {}
 E {}
-B 2 1100 -100 1900 300 {flags=graph
+B 2 1100 -440 1900 -40 {flags=graph
 y1=0
 y2=2
 ypos1=0
@@ -25,6 +25,28 @@ color="4 5"
 dataset=-1
 unitx=1
 logx=0
+logy=0
+}
+B 2 1110 20 1910 420 {flags=graph
+y1=0.4
+y2=2.4
+ypos1=0
+ypos2=2
+divy=5
+subdivy=1
+unity=1
+x1=-35
+x2=-6.69897
+divx=5
+subdivx=8
+xlabmag=1.0
+ylabmag=1.0
+node="\\"pin_out db20()\\"
+\\"rf_out db(20)\\""
+color="5 6"
+dataset=-1
+unitx=1
+logx=1
 logy=0
 }
 N 385 110 440 110 {
@@ -73,21 +95,32 @@ footprint=1206
 device="ceramic capacitor"}
 C {devices/gnd.sym} 440 170 0 0 {name=l3 lab=GND}
 C {devices/lab_wire.sym} 585 110 0 1 {name=p7 sig_type=std_logic lab=pin_out}
-C {devices/simulator_commands_shown.sym} 710 100 0 0 {name=COMMANDS
+C {devices/simulator_commands_shown.sym} 680 100 0 0 {name=COMMANDS
 simulator=ngspice
 only_toplevel=false 
 value="
 * ngspice commands
-.options savecurrents
-.control
-save all
-tran 100p 200n
+.option savecurrents
 
-write testbench_degenerated_lna.raw
+.control
+
+ save all
+ op
+ remzerovec 
+ write testbench_degenerated_lna.raw
+ set appendwrite
+
+ ac dec 10 1 1e12
+ remzerovec
+ write testbench_degenerated_lna.raw
+
+ tran 100p 200n
+ write testbench_degenerated_lna.raw
 
 .endc
 "}
-C {devices/vsource.sym} 15 140 0 0 {name=V3 value="sine(0 0.00223 2.4G)" savecurrent=false}
+C {devices/vsource.sym} 15 140 0 0 {name=V3 value="0 ac 1 0
++ sin(0 0.00223 2.4G 0 0 0)" savecurrent=false}
 C {devices/gnd.sym} 15 170 0 0 {name=l4 lab=GND}
 C {devices/ammeter.sym} 255 0 0 0 {name=Vmeas savecurrent=true}
 C {devices/lab_wire.sym} 255 -30 0 0 {name=p3 sig_type=std_logic lab=VDD}

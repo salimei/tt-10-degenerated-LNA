@@ -1,0 +1,65 @@
+** sch_path: /home/ttuser/Documents/GitHub/tt-10-degenerated-LNA/xschem/testbench_degenerated_lna.sch
+**.subckt testbench_degenerated_lna
+x1 net1 VSS rf_out rf_in degenerated_lna
+V1 VDD GND 1.8
+V2 VSS GND 0
+R1 pin_out rf_out 500 m=1
+C1 rf_out GND 5p m=1
+V3 rf_in GND 0 ac 1 0 sin(0 0.00223 2.4G 0 0 0)
+Vmeas VDD net1 0
+.save i(vmeas)
+**** begin user architecture code
+
+** opencircuitdesign pdks install
+.lib /home/ttuser/pdk/sky130A/libs.tech/ngspice/sky130.lib.spice tt
+
+
+
+
+
+* ngspice commands
+.option savecurrents
+
+.control
+
+ save all
+ op
+ remzerovec
+ write testbench_degenerated_lna.raw
+ set appendwrite
+
+ ac dec 10 1 1e12
+ remzerovec
+ write testbench_degenerated_lna.raw
+
+ tran 100p 200n
+ write testbench_degenerated_lna.raw
+
+.endc
+
+
+
+**** end user architecture code
+**.ends
+
+* expanding   symbol:  degenerated_lna.sym # of pins=4
+** sym_path: /home/ttuser/Documents/GitHub/tt-10-degenerated-LNA/xschem/degenerated_lna.sym
+** sch_path: /home/ttuser/Documents/GitHub/tt-10-degenerated-LNA/xschem/degenerated_lna.sch
+.subckt degenerated_lna VDD VSS rf_out rf_in
+*.iopin VDD
+*.iopin VSS
+*.ipin rf_in
+*.opin rf_out
+XM1 net1 net1 VSS VSS sky130_fd_pr__nfet_01v8 L=0.15 W=10 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29' pd='2*int((nf+1)/2) * (W/nf + 0.29)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W' sa=0 sb=0 sd=0 mult=1 m=1
+XM2 Vds Vgs VSS VSS sky130_fd_pr__nfet_01v8 L=0.15 W=10 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29' pd='2*int((nf+1)/2) * (W/nf + 0.29)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W' sa=0 sb=0 sd=0 mult=1 m=1
+XC1 Vgs rf_in sky130_fd_pr__cap_mim_m3_1 W=30 L=30 MF=1 m=1
+XC2 rf_out Vds sky130_fd_pr__cap_mim_m3_1 W=30 L=30 MF=1 m=1
+XR1 Vgs net1 net2 sky130_fd_pr__res_xhigh_po_0p35 L=4 mult=1 m=1
+XR2 net1 VDD net3 sky130_fd_pr__res_high_po_0p69 L=3.45 mult=1 m=1
+XR3 Vds VDD net4 sky130_fd_pr__res_high_po_0p69 L=3.45 mult=1 m=1
+.ends
+
+.GLOBAL GND
+.end
