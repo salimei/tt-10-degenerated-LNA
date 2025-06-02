@@ -5,7 +5,7 @@ V1 VDD GND 1.8
 V2 VSS GND 0
 R1 pin_out rf_out 500 m=1
 C1 rf_out GND 5p m=1
-V3 rf_in GND 0 ac 1 0 sin(0 0.00223 2.4G 0 0 0)
+V3 rf_in GND 0 ac 1 0 sin(0 1m 100meg 0 0 0)
 Vmeas VDD net1 0
 .save i(vmeas)
 **** begin user architecture code
@@ -17,23 +17,23 @@ Vmeas VDD net1 0
 
 
 
-* ngspice commands
-.option savecurrents
+.options reltol=1e-5
++  abstol=1e-14 savecurrents
 
 .control
 
- save all
- op
- remzerovec
- write testbench_degenerated_lna.raw
- set appendwrite
+  save all
+  op
+  remzerovec
+  write testbench_degenerated_lna.raw
+  set appendwrite
 
- ac dec 10 1 1e12
- remzerovec
- write testbench_degenerated_lna.raw
+  ac dec 10 1 1e12
+  remzerovec
+  write testbench_degenerated_lna.raw
 
- tran 100p 200n
- write testbench_degenerated_lna.raw
+  tran 0.1n 200n
+  write testbench_degenerated_lna.raw
 
 .endc
 
