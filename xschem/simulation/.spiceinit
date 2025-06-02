@@ -1,4 +1,3 @@
- .spiceinit for use with Skywater PDK and ngspice KLU
 set ngbehavior=hsa     ; set compatibility for reading PDK libs
 set skywaterpdk        ; skip some checks for faster lib loading
 set ng_nomodcheck      ; don't check the model parameters
